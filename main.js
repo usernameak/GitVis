@@ -1,4 +1,6 @@
-let page = 0;
+'use strict';
+
+let page = 0; //fuck you
 
 let gitdata = [];
 
@@ -32,15 +34,15 @@ function visualize() {
     const net = new vis.Network(cont, { nodes, edges }, {});
 }
 
-function callAjax() {
-    $.ajax("https://api.github.com/repos/3dfxdev/hyper3DGE/commits?access_token=34aa0ed21cda3f4ee8f5e9d498f275e91d86a4ce&page=" + page, {
+function callAjax(repo) {
+    $.ajax(`https://api.github.com/repos/${repo}/commits?access_token=34aa0ed21cda3f4ee8f5e9d498f275e91d86a4ce&page=${page}`, {
         dataType: "json",
         success: function (data) {
             page++;
             console.log(data.length);
             if(data.length) {
                 gitdata = gitdata.concat(data);
-                callAjax();
+                callAjax(repo); //Recoursive?? fuck it
             } else {
                 visualize();
             }
@@ -49,4 +51,4 @@ function callAjax() {
     });
 }
 
-callAjax();
+callAjax(prompt("Enter your fucking repo like PROPHESSOR/JsOS"));
